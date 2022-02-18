@@ -26,8 +26,11 @@ def dfs(now, cost, visited):
             dfs(k, cost+city[now][k], visited)
             visited[k] = 0
 
+#### 10%에서 계속 틀리길래, 시작점을 전부 돌면서 실행한 후 그 중 최소값을 출력 ####
+# 이랬더니 40%에서 계속 틀렸습니다
 ans = int(1e9)
 for i in range(N):
+		# 시작점부터 순회하면서 시작점 전까지
     visited = [0] * N
     res = int(1e9)
     result_list = []
@@ -36,7 +39,9 @@ for i in range(N):
     visited[start] = 1
     dfs(start, 0, visited)
 
+		# 마지막 node에서 시작점으로 이동
     for result in result_list:
         node, cost = result[0], result[1]
-        ans = min(ans, cost + city[node][start])
+        if city[node][start] != 0:
+            ans = min(ans, cost + city[node][start])
 print(ans)
