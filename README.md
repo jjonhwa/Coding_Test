@@ -1,6 +1,9 @@
 # Coding_Test
 Practice about Conding_Test
 
+## Study
+- [BackTracking](backtracking)
+
 ## BackTracking
 
 <details>
