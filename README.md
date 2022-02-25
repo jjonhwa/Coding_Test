@@ -1,9 +1,13 @@
 # Coding_Test
 Practice about Conding_Test
 
-## Study
+## Algorithm Study
 - [BackTracking](#BackTracking)
+
+## Module 사용법
 - [heapq](#heapq)
+- [Counter](#Counter)
+
 ## BackTracking
 
 <details>
@@ -177,3 +181,69 @@ for _ in range(N):
 ```
 
 </details>
+
+## Counter 클래스 사용법
+
+<details>
+    <summary><b>설명</b></summary>
+
+- 데이터의 개수를 셀 때 유용한 모듈
+- `from collections import Counter`
+- `Counter`는 파이썬의 기본 자료구조인 dictionary를 확장하고 있기 때문에, dictionary에서 제공하는 API를 그대로 사용할 수 있다.
+
+### Dictionary vs Counter
+
+#### Dictionary
+
+```python
+word = "hello world"
+
+counter = {}
+for w in word:
+    if w not in counter:
+        counter[w] = 1
+        continue
+    counter[w] += 1
+print(counter)
+# {'h': 1, 'e': 1, 'l': 3, 'o': 2, ' ': 1, 'w': 1, 'r': 1, 'd': 1}
+```
+
+#### Counter
+
+```python
+from collections import Counter
+Counter("hello world")
+# Counter({'l': 3, 'o': 2, 'h': 1, 'e': 1, ' ': 1, 'w': 1, 'r': 1, 'd': 1})
+```
+
+### 데이터의 개수가 많은 순 정렬
+
+- Basic Code
+
+```python
+from collections import Counter
+
+word = "hello world"
+
+counter = Counter(word)
+max_count = -1
+
+for key in counter.keys():
+    if counter[key] > max_count:
+        max_count = counter[key]
+        max_letter = letter
+print((letter, max_letter)) # ('l', 3)
+```
+
+- Code with Counter
+
+```python
+from collections import Counter
+common = Counter("hello world").most_common()
+# [('l', 3), ('o', 2), ('h', 1), ('e', 1), (' ', 1), ('w', 1), ('r', 1), ('d', 1)]
+
+print(common[0])
+```
+
+</details>
+`
