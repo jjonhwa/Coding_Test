@@ -3,7 +3,7 @@ Practice about Conding_Test
 
 ## Study
 - [BackTracking](#BackTracking)
-
+- [heapq](#heapq)
 ## BackTracking
 
 <details>
@@ -75,6 +75,104 @@ def dfs(x):
 
 dfs(0)
 print(ans)
+```
+
+</details>
+
+## heapq
+
+<details>
+    <summary><b>설명</b></summary>
+
+- Binary tree 기반의 최소힙 자료구조를 제공한다.
+- 최소힙 자료구조를 사용할 경우, 원소들이 항상 정렬된 상태로 추가 및 삭제된다.
+    - 주의해야할 점은 정렬이 될 경우, 최소값을 보장해주지만 오름차순 혹은 내림차순의 정렬을 보장해주지는 않는다.
+- `heappush()`, `heappop()`, `heapify()`는 O(logN)의 시간복잡도를 가진다.
+
+#### 원소 추가 (heappush)
+```python
+heap = []
+heapq.heappush(heap, 4)
+heapq.heappush(heap, 1) ...
+```
+
+#### 원소 삭제 및 꺼내기 (heappop)
+```python
+heapq.heappop(heap)
+```
+
+- 위의 코드를 활용할 경우, heap 배열에서 최솟값을 꺼내게 된다.
+- heapq의 경우 맨 앞에 최소값을 보장해주기 때문에 `heapq[0]`을 활용하여 값을 제거하지 않으면서 꺼내올 수도 있다.
+
+#### 힙 변환
+```python
+heap = [6,2,5,4,3,1,7]
+heapq.heapify(heap)
+```
+
+- `heapify()`의 경우, 기존 배열에서의 원소들이 힙 구조에 맞게 재배치되면서 최소값을 0번째 인덱스에 위치하도록 한다.
+- 비어있는 배열을 생성하고, heappush()를 활용하여 하나씩 추가한 효과가 나타나며, 시간복잡도는 원소의 수에 비례하여 O(NlogN)을 가진다.
+#### 최대힙 (응용)
+- heap에 tuple을 원소로 추가하거나 삭제한다.
+    - tuple을 활용할 경우 tuple의 0번째 index를 기준으로 최소힙이 구성된다.
+- `(우선순위, 값)` 구조의 튜플을 heap에 삽입 및 삭제를 해줄 경우, 우선순위 기준으로 최소힙 정렬이 진행된다.
+- 즉, **우선순위를 음수로 넣어주고, 값을 본래의 값**을 넣어주고 최소힙 정렬을 하게되면, 가장 큰 값을 0번째에 위치하도록 보장한다.
+
+```python
+for num in nums:
+    heapq.heappush(heap, (-num, num))
+heapq.heappop(heap)[1]
+```
+
+#### K번째 최소, 최대값 (응용)
+- K번째 값을 추출할 경우, 힙 정렬을 한 후 `heappop()`을 k번 호출하면 할 수 있다.
+
+```python
+k_th = None
+heapq.heapify(heap)
+for _ in range(k):
+    k_th = heapq.heappop(heap)
+print(k_th)
+```
+
+</details>
+
+<details>
+    <summary><b>대표예제</b></summary>
+
+### 최대힙 (백준 11279)
+
+#### 문제
+- 배열에 자연수 x를 넣는다.
+- 배열에서 가장 큰 값을 출력하고, 그 값을 배열에서 제거한다.
+
+- 입력 
+    - N (1 <= N <= 100000)
+    - N개의 줄에 연산 정보 x 입력.
+    - x가 자연수일 경우 배열에 추가, 0일 경우 가장 큰 값 출력 및 제거
+- 출력
+    - 0이 주어진 회수만큼 답 출력
+    - 비어있는 배열인데 0이 주어질 경우 0을 출력
+
+#### code
+
+```python
+import sys
+import heapq
+input = sys.stdin.readline
+
+N = int(input())
+number_list = []
+for _ in range(N):
+    insert = int(input())
+    if insert == 0:
+        if number_list:
+            pop_number = heapq.heappop(number_list)[1]
+            print(pop_number)
+        else:
+            print(0)
+    else:
+        heapq.heappush(number_list, (-insert, insert))
 ```
 
 </details>
