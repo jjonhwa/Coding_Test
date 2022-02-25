@@ -246,4 +246,3 @@ print(common[0])
 ```
 
 </details>
-`
