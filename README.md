@@ -246,3 +246,111 @@ print(common[0])
 ```
 
 </details>
+
+## 양방향 링크드 리스트
+
+<details>
+    <summary><b>설명</b></summary>
+
+### 사용법 및 사용할 경우
+- head node부터 탐색하는 것은 O(n)의 시간복잡도를 가진다.
+- O(n)의 시간복잡도가 너무 큰 경우, 더욱 빠르게 해결하기 위하여 양방향 링크드 리스트를 활용한다.
+- 양방향 링크드 리스트는 3개의 구성요소를 갖는다.
+    - **Node 값인 Key**와 **2개의 Link**
+    - **첫번째 링크는 앞 노드의 주소 링크**
+    - **두번째 링크는 이전 노드의 주소 링크**
+
+- 시간 측면에서는 좋을 수 있으나, 메모리 측면에서는 손해가 있다. (즉, 메모리를 손해보면서 더욱 빠르게 실행할 수 있는 알고리즘이다.)
+
+### 알고리즘
+- Linked List: 길이가 정해져있지 않은 Data에 연결된 집합
+- 단방향 Linked List
+    - Data를 저장한 Node에 다음 Node의 주소를 가지고 있는 형태
+
+- 양방향 Linked List
+    - Data를 저장한 Node의 다음 Node, 이전 Node의 주소를 가지고 있는 형태
+
+    - 새로운 Node 삽입
+        - 이전 Node가 가지고 있던 다음 Node 주소를 새로운 Node에 삽입
+        - 이전 Node의 주소를 새로운 Node의 이전 주소로 삽입
+        - 다음 Node가 가지고 있던 이전 Node의 주소를 새로운 Node의 주소로 삽입
+
+    - 기존 Node 삭제
+        - 기존 Node가 가지고 있는 다음 Node 주소를 이전 Node의 다음 주소에 삽입
+        - 기존 Node가 가지고 있는 이전 Node 주소를 다음 Node의 이전 주소에 삽입
+
+- **삭제 및 삽입을 통한 풀이가 아니다!** (일반적으로)
+- `prev`와 `next`를 활용하여 index를 움직여주면서 삽입, 삭제를 표시해주는 방식으로 풀이를 진행한다.
+
+<details>
+    <summary><b>대표예제</b></summary>
+
+### 표 편집 (프로그래머스 81303)
+
+#### 문제
+[링크 참고](https://programmers.co.kr/learn/courses/30/lessons/81303)
+
+#### Code
+
+```python
+def solution(n, k, cmd):
+    answer = ''
+    
+    name_list = []
+    for i in range(n):
+        name_list.append([max(0,i-1), 'O', min(i+1,n-1)])
+        # [[0,'O',1], [0,'O',2], [1,'O',3], [2,'O',4], ..., [5,'O',7], [6,'O',7]]
+    
+    delete_stack = []     # 삭제할 name & row
+    now = k               # 현재 행
+    for command in cmd:
+
+        if "D" in command:
+            move = command.split()[-1]
+            for i in range(int(move)):
+                now = name_list[now][2] # _next로 움직인 결과값
+
+        elif 'U' in command:
+            move = command.split()[-1]
+            for i in range(int(move)):
+                now = name_list[now][0] # prev로 움직인 결과값
+
+        elif command == "C":
+            name_list[now][1] = 'X'
+            prev, _, _next = name_list[now]
+            delete_stack.append([now, prev, _next])   
+
+            # 주소 변환
+            if now == name_list[now][2]: # 마지막 행일 경우
+                name_list[prev][2] = prev 
+                now = prev
+            elif now == name_list[now][0]: # 첫 행일 경우
+                name_list[_next][0] = _next
+                now = _next
+            else:
+                name_list[prev][2] = _next
+                name_list[_next][0] = prev
+                now = _next
+
+        elif command == 'Z':
+            idx, prev, _next = delete_stack.pop()
+
+            # 삽입 행
+            name_list[idx][0] = prev
+            name_list[idx][2] = _next
+            name_list[idx][1] = 'O'
+
+            # 이전 행 => 첫번째 행이 복구되는 경우에는 prev를 조작하지 않는다.
+            if prev != idx:
+                name_list[prev][2] = idx
+
+            # 다음 행 => 마지막 행이 복구되는 경우에는 next를 조작하지 않는다.
+            if _next != idx:
+                name_list[_next][0] = idx
+                
+    for i in range(n):
+        answer += name_list[i][1]
+    return answer
+```
+
+</details>
