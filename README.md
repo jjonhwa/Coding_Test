@@ -270,17 +270,17 @@ print(common[0])
 - 양방향 Linked List
     - Data를 저장한 Node의 다음 Node, 이전 Node의 주소를 가지고 있는 형태
 
-    - 새로운 Node 삽입
-        - 이전 Node가 가지고 있던 다음 Node 주소를 새로운 Node에 삽입
-        - 이전 Node의 주소를 새로운 Node의 이전 주소로 삽입
-        - 다음 Node가 가지고 있던 이전 Node의 주소를 새로운 Node의 주소로 삽입
+    - **새로운 Node 삽입**
+        - **이전 Node가 가지고 있던 다음 Node 주소를 새로운 Node에 삽입**
+        - **이전 Node의 주소를 새로운 Node의 이전 주소로 삽입**
+        - **다음 Node가 가지고 있던 이전 Node의 주소를 새로운 Node의 주소로 삽입**
 
-    - 기존 Node 삭제
-        - 기존 Node가 가지고 있는 다음 Node 주소를 이전 Node의 다음 주소에 삽입
-        - 기존 Node가 가지고 있는 이전 Node 주소를 다음 Node의 이전 주소에 삽입
+    - **기존 Node 삭제**
+        - **기존 Node가 가지고 있는 다음 Node 주소를 이전 Node의 다음 주소에 삽입**
+        - **기존 Node가 가지고 있는 이전 Node 주소를 다음 Node의 이전 주소에 삽입**
 
 - **삭제 및 삽입을 통한 풀이가 아니다!** (일반적으로)
-- `prev`와 `next`를 활용하여 index를 움직여주면서 삽입, 삭제를 표시해주는 방식으로 풀이를 진행한다.
+- **`prev`와 `next`를 활용하여 index를 움직여주면서 삽입, 삭제를 표시해주는 방식으로 풀이를 진행한다.**
 
 <details>
     <summary><b>대표예제</b></summary>
