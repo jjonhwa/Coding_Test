@@ -282,6 +282,9 @@ print(common[0])
 - **삭제 및 삽입을 통한 풀이가 아니다!** (일반적으로)
 - **`prev`와 `next`를 활용하여 index를 움직여주면서 삽입, 삭제를 표시해주는 방식으로 풀이를 진행한다.**
 
+</details>
+
+
 <details>
     <summary><b>대표예제</b></summary>
 
