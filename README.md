@@ -3,6 +3,7 @@ Practice about Conding_Test
 
 ## Algorithm Study
 - [BackTracking](#BackTracking)
+- [양방향 링크드 리스트](#양방향-링크드-리스트)
 
 ## Module 사용법
 - [heapq](#heapq)
