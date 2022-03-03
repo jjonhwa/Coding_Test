@@ -4,10 +4,34 @@ Practice about Conding_Test
 ## Algorithm Study
 - [BackTracking](#BackTracking)
 - [양방향 링크드 리스트](#양방향-링크드-리스트)
+- [분리집합](#분리집합)
+- [위상정렬](#위상정렬)
 
 ## Module 사용법
 - [heapq](#heapq)
 - [Counter](#Counter)
+
+## Study
+
+- Python 명명 규칙
+    - Python 명명 규칙 ([https://mentha2.tistory.com/186](https://mentha2.tistory.com/186))
+    - Pythonic → PEP8 ([https://www.python.org/dev/peps/pep-0008/](https://www.python.org/dev/peps/pep-0008/))
+- heapq vs deque
+    - heapq가 필수적으로 필요할 경우가 아닌 이상 deque 사용 권장
+    - heapq의 경우, multihtread -> wait()를 사용하기 때문세 속도가 조금 더 느리다고 한다.
+    - deque: 선입선출, BFS
+    - heapq: 최소힙, 최대힙, 다익스트라 (시간복잡도: O(logN))
+- **List Indexing의 Time Complexity: O(n)**
+- **Combination의 Time COmplexity: n개 중 2개 -> O(2^n) / n개 중 3개 -> O(3^n) ...**
+- `while q` vs `while len(q)`
+    - 결론부터 말하자면, **`while len(q)`를 활용했을 경우 속도가 조금 더 빠르다.**
+    - `while q`의 경우, 시간이 q만큼 소모. 즉, 시간복잡도 O(q)
+    - `while len(q)`의 경우, 시간은 상수의 시간복잡도를 가진다. 즉, 시간복잡도 O(1)
+- "다익스트라 + 왕복 경로"를 해결할 때, 결로를 뒤집어주는 방식을 활용하는 것도 좋은 방법이 될 수 있다.
+- **`if something in [1,2,...]` 과 같은 조건문을 활용할 경우, Time Complexity는 O(N)이므로, 이를 상수 시간복잡도로 만들어주기 위하여 visited와 같은 정보를 미리 저장해놓고 사용하도록 한다.**
+- `if something in set([1,2,...])`과 같은 조건문을 사용하게 되면, Time Complexity는 O(1)이 된다.
+- `global` 변수의 경우 참조 시간이 더 오래 걸린다.
+- Python의 경우, 전역 변수에 접근하는 것은 시간이 오래걸리기 떄문에 **지역 변수로 선언하여 사용하는 것이 더 효율적**이다.
 
 ## BackTracking
 
@@ -358,3 +382,165 @@ def solution(n, k, cmd):
 ```
 
 </details>
+
+## 분리집합
+
+<details>
+    <summary><b>설명</b></summary>
+
+### 분리집합이란?
+- Union-Find 집합이라고도 하며, Disjoint-Set (서로소 집합 혹은 분리 집합)이라고 한다.
+- 흔히, 배열에서 Index를 Node로 나타내여 각각의 index에 대한 값에 해당 index의 parent node 정보를 저장한다.
+- 주로 그래프 문제에 적용할 수 있으며, 순수히 Node간의 연결 관계를 파악할 때, 유용하다.
+
+### 알고리즘
+- Union (서로 다른 두 집합을 합치는 연산)
+- Find (Root Node를 찾는 연산)
+
+#### Union
+- 서로 다른 두 집합을 합치는 연산
+- 각 tree의 root node를 비교하여 둘 중 작은 root node를 기준으로 합친다. (큰 node를 기준으로 합쳐서 상관없으나, 흔히 이렇게 한다고 한다.)
+- Union 연산을 하기 위해서는 반드시 find 연산을 필요로한다.
+
+#### Find
+- 어떤 인자를 주었을 때, 해당 node의 root node를 반환하는 연산
+- 임의의 두 node가 연결되어있는지 확인할 때 사용한다.
+- 흔히, 재귀 형태로 구현한다.
+- 시간복잡도의 효율을 높이기 위해, 경로 압축 최적화를 한다. (자식 노드들이ㅡ 값을 모두 root node로 변경하여, Skewed Tree를 방지한다.)
+
+</details>
+
+
+<details>
+    <summary><b>대표예제</b></summary>
+
+### 집합의 표현 (백준 1717)
+
+#### 문제
+초기에 {0}, {1}, {2}, ... {n} 이 각각 n+1개의 집합을 이루고 있다. 여기에 합집합 연산과, 두 원소가 같은 집합에 포함되어 있는지를 확인하는 연산을 수행하려고 한다.
+
+집합을 표현하는 프로그램을 작성하시오.
+
+#### Code
+
+```python
+import sys
+
+sys.setrecursionlimit(10**6)                # 재귀 한도 늘려주기
+input = sys.stdin.readline
+
+n, m = list(map(int, input().split()))
+parent = [i for i in range(n+1)]            # Parent Node 정의
+
+def find(x):
+    """부모 Node를 찾는 함수"""
+    if parent[x] == x:                      # 부모가 자기 자신을 경우 그대로 반환
+        return x
+    
+    parent[x] = find(parent[x])             # 부모가 다른 값일 경우
+    return parent[x]
+
+def union(parent_a, parent_b):
+    """
+    두 집합을 합쳐주는 함수
+    
+    Args:
+        parent_a: a의 부모 node
+        parent_b: b의 부모 node
+    """
+    if parent_a < parent_b:                 # 더 작은 값을 기준으로 합쳐준다.
+        parent[parent_b] = parent_a
+    else:
+        parent[parent_b] = parent_b
+
+for _ in range(m):
+    cal, a, b = list(map(int, input().split()))
+    parent_a = find(a)
+    parent_b = find(b)
+
+    if cal == 0:
+        union(parent_a, parent_b)
+    else:
+        if parent_a == parent_b:
+            print('YES')
+        else:
+            print('NO')
+
+```
+
+</details>
+
+## 위상정렬
+
+<details>
+    <summary><b>설명</b></summary>
+
+### 위상정렬이란?
+- 어떤 일을 하는 순서를 찾는 알고리즘
+- 정점들의 선행순서를 위배하지 않으면서 모든 정점을 나열하는 것
+
+### 위상정렬의 특징
+- 한 방향 그래프에서는 여러 위상 정렬이 가능
+- 선택되는 정점의 순서를 위상 순서라고 한다.
+- 남아있는 정점 중 진입 차수가 0인 정점이 없다면 알고리즘이 중단되고 실행불가능하다.
+Cycle이 발생하는 경우, 위상 정렬을 수행할 수 없다.
+
+### 알고리즘
+- 우선 위상정렬 알고리즘이 적용 가능한지 확인한다.
+    - Cycle이 존재하지 않는가?
+    - 시작점이 존재하는가?
+- 위의 조건을 만족한다면, 마지막으로 결과가 있는지 확인한다.
+
+</details>
+
+
+<details>
+    <summary><b>대표예제</b></summary>
+
+### 문제 (백준 14567)
+
+올해 Z대학 컴퓨터공학부에 새로 입학한 민욱이는 학부에 개설된 모든 전공과목을 듣고 졸업하려는 원대한 목표를 세웠다. 어떤 과목들은 선수과목이 있어 해당되는 모든 과목을 먼저 이수해야만 해당 과목을 이수할 수 있게 되어 있다. 공학인증을 포기할 수 없는 불쌍한 민욱이는 선수과목 조건을 반드시 지켜야만 한다. 민욱이는 선수과목 조건을 지킬 경우 각각의 전공과목을 언제 이수할 수 있는지 궁금해졌다. 계산을 편리하게 하기 위해 아래와 같이 조건을 간소화하여 계산하기로 하였다.
+
+- 한 학기에 들을 수 있는 과목 수에는 제한이 없다.
+- 모든 과목은 매 학기 항상 개설된다.
+
+### Code
+
+```python
+from collections import deque
+import sys
+
+input = sys.stdin.readline
+
+n, m = list(map(int, input().split()))          # node와 간선의 개수 입력
+indegree = [0] * (n+1)                          # 모든 Node에 대한 진입차수를 0으로 초기화
+graph = [[] for _ in range(n+1)]                # 각 Node에 연결된 간선 정보를 담기 위한 graph 초기화
+answer = [0] * (n+1)                            # 해당 Node의 수강학기를 담기 위한 List
+for _ in range(m):                              # Graph에서 모든 간선 정보 입력
+    a, b = list(map(int, input().split()))
+    graph[a].append(b)                          # a에서 b로만 이동 가능
+    indegree[b] += 1                            # b의 진입차수 1 증가
+
+queue = deque()
+for i in range(1, len(indegree)):               # 맨 처음 수강정보를 queue에 삽입
+    if indegree[i] == 0:                        # 진입차수가 없는 경우에만 추가 (맨 처음이므로)
+        queue.append(i)
+        answer[i] = 1
+
+while len(queue):                               # queue가 빌 때 까지, 반복
+    target = queue.popleft()
+    for _next in graph[target]:
+        indegree[_next] -= 1                    # 진입차수 -1
+
+        if indegree[_next] == 0:                # 진입차수가 0일 경우에만 answer update
+            queue.append(_next)
+            answer[_next] = answer[target] + 1  # 이전 answer에 + 1
+
+# 출력
+for i in range(1, len(answer)):
+    print(answer[i], end=' ')
+```
+
+</details>
+
+
