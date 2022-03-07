@@ -1,6 +1,7 @@
 # 팰린드롬: 앞, 뒤가 똑같은 단어나 문장. 즉, 뒤집어도 똑같은 말이 되는 문장 혹은 단어
-# 속도: 상위 8% / 메모리: 하위 10% => 메모리 측면에서 부족한 풀이
 
+# 내 풀이
+# 속도: 상위 8% / 메모리: 하위 10% => 메모리 측면에서 부족한 풀이
 class Solution:
     def isPalindrome(self, s: str) -> bool:
         check_string = s
@@ -25,3 +26,16 @@ class Solution:
                 break
 
         return answer
+
+# 정답
+# 속도: 상위 5% / 메모리: 상위 20%
+class Solution:
+    def isPalindrome(self, s: str) -> bool:        
+        # remove special string and make alphabet lower
+        s = s.lower()
+        s = re.sub('[^a-z0-9]', '', s)
+        
+        if s == s[::-1]:
+            return True
+        else:
+            return False
