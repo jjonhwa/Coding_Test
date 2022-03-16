@@ -6,7 +6,7 @@ Practice about Conding_Test
 - [양방향 링크드 리스트](#양방향-링크드-리스트)
 - [분리집합](#분리집합)
 - [위상정렬](#위상정렬)
-
+- [플로이드 워셜](#플로이드-워셜)
 ## Module 사용법
 - [heapq](#heapq)
 - [Counter](#Counter)
@@ -539,6 +539,77 @@ while len(queue):                               # queue가 빌 때 까지, 반�
 # 출력
 for i in range(1, len(answer)):
     print(answer[i], end=' ')
+```
+
+</details>
+
+## 플로이드 워셜
+
+<details>
+    <summary><b>설명</b></summary>
+
+### 플로이드 워셜 알고리즘이란?
+- 모든 노드에서 다른 모든 노드까지의 최단 경로를 모두 계산한다.
+
+### 작동 원리
+- 다익스트라 알고리즘과 마찬가지로 단계별로 **거쳐가는 노드를 기준으로 알고리즘을 수행**한다.
+- 2차원 테이블에 최단 거리 정보를 저장한다.
+- 이전 값을 활용한다는 점에서 다이나믹 프로그래밍 유형에 속한다.
+- 시간복잡도 O(N^3)이기 때문에, 노드의 개수가 적을 경우에 유용하게 사용할 수 있으며, 노드와 간선의 개수가 많아지면 플로이드워셜보다는 다익스트라를 활용해야 해결할 수 있다.
+
+### 점화식
+- 각 단계마다 특정한 노드 k를 거쳐 가는 경우를 확인한다.
+- **a에서 b로 가는 최단 거리**보다 **a에서 k를 거쳐 b로 가는 거리**가 더 짧은지 검사한다.
+- 점화식
+**$$D_{ab}$$ = $$min(D_{ab}, D_{ak} + D_{kb})$$**
+
+### 과정
+- 2차원 List를 만든다. 이 때, 행은 출발 Node를, 열은 도착 Node를 의미한다.
+- 초기 상태
+    - **자기 자신에서 자기 자신으로 가는 값은 0이다.**
+    - **인접한 Node만을 확인하면서 인접한 Node까지의 거리를 2차원 List에 삽입한다.**
+- 알고리즘 수행
+    - **점화식에 따라, a to b와 a to k + k to b를 비교하면서 더 짧은 거리의 값으로 update**
+
+</details>
+
+
+<details>
+    <summary><b>코드</b></summary>
+
+```python
+INF = int(1e9) # 무한을 의미하는 값을 설정
+
+n = int(input()) # node의 개수 입력
+m = int(input()) # 간선의 개수 입력
+graph = [[INF] * (n+1) for _ in range(n+1)] # 2차원 list 형태로 graph 초기화
+
+# 자기 자신에서 자기 자신으로 가는 거리는 0으로 초기화
+for i in range(1, n+1):
+    for j in range(1, n+1):
+        if i == j:
+            graph[i][j] = 0
+
+# 각 간선에 대한 정보를 입력받아, 직접 연결된 node 사이의 거리 초기화
+for _ in range(m):
+    a, b, c = map(int, input().split())
+    graph[a][b] = c
+    # 양방향일 경우
+    # graph[b][a] = c
+
+# 점화식에 따른 플로이드 워셜 알고리즘 수행
+for k in range(1, n+1):
+    for i in range(1, n+1):
+        for j in range(1, n+1):
+            graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j])
+
+# 수행 결과 출력
+for i in range(1, n+1):
+    for j in range(1, n+1):
+        if graph[i][j] == INF:
+            print('INFINITY', end=' ')
+        else:
+            print(graph[i][j], end=' ')
 ```
 
 </details>
