@@ -32,6 +32,7 @@ Practice about Conding_Test
 - `if something in set([1,2,...])`과 같은 조건문을 사용하게 되면, Time Complexity는 O(1)이 된다.
 - `global` 변수의 경우 참조 시간이 더 오래 걸린다.
 - Python의 경우, 전역 변수에 접근하는 것은 시간이 오래걸리기 떄문에 **지역 변수로 선언하여 사용하는 것이 더 효율적**이다.
+- 원형으로 생긴 문제를 해결할 경우, 직선 구간을 *2를 해주게되면, 원형을 선형문제로 해결할 수 있다.
 
 ## BackTracking
 
