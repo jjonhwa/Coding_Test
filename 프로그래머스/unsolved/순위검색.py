@@ -153,3 +153,71 @@ def solution(info, query):
         #         count += 1
         # answer.append(count)
     return answer
+
+# 통과
+from itertools import product, combinations
+
+from typing import List
+
+def binary_search(check_score: List, score: int) -> int:
+    if len(check_score) == 0:
+        return 0
+
+    start, end = 0, len(check_score)-1
+
+    min_idx = len(check_score)
+    while start <= end:
+        mid = (start + end) // 2
+
+        if check_score[mid] >= score:
+            end = mid-1
+            min_idx = min(min_idx, mid)
+        else:
+            start = mid+1
+    return len(check_score) - min_idx
+
+
+def solution(info, query):
+    answer = []
+
+    languages = ['cpp', 'java', 'python']
+    stacks = ['backend', 'frontend']
+    careers = ['junior', 'senior']
+    foods = ['chicken', 'pizza']
+
+    combination_dict = {'empty': []}
+    for prod in list(product(languages, stacks, careers, foods)):
+        for i in range(1, 5):
+            for comb in combinations(prod, i):
+                combination_dict[comb] = []
+
+    for information in info:
+        language, stack, career, food, score = information.split()
+        combination_dict['empty'].append(int(score))
+        for i in range(1, 5):
+            for comb in combinations([language, stack, career, food], i):
+                combination_dict[comb].append(int(score))
+
+    for key in combination_dict.keys():
+        combination_dict[key].sort()
+
+    for q in query:
+        language, stack, career, food_score = q.split(' and ')
+        food, score = food_score.split()
+
+        name = []
+        if language != '-': name.append(language)
+        if stack != '-': name.append(stack)
+        if career != '-': name.append(career)
+        if food != '-': name.append(food)
+        name = tuple(name)
+
+        if not name:
+            name = 'empty'
+
+        check_score = combination_dict[name]
+
+        count = binary_search(check_score, int(score))
+        answer.append(count)
+
+    return answer
