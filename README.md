@@ -26,7 +26,7 @@ Practice about Conding_Test
 ~~- `while q` vs `while len(q)`
     - 결론부터 말하자면, **`while len(q)`를 활용했을 경우 속도가 조금 더 빠르다.**
     - `while q`의 경우, 시간이 q만큼 소모. 즉, 시간복잡도 O(q)
-    - `while len(q)`의 경우, 시간은 상수의 시간복잡도를 가진다. 즉, 시간복잡도 O(1)
+    - `while len(q)`의 경우, 시간은 상수의 시간복잡도를 가진다. 즉, 시간복잡도 O(1)~~
 - `while q` vs `while len(q)` (참고, 확실하진 않다.)
     - `while q`를 활용하는 것이 시간적으로 더욱 효율적이다.
     - `while len(q)`는 list 참조변수가 가리키는 주소로 접근해서 list 객체 안에 있는 len 변수까지 접근하기 때문에 총 2번의 연산을 하는 반면, `while q`는 list 참조변수가 가리키는 주소로 가서 한 번의 연산만 하면 종료된다.
