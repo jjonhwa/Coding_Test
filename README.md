@@ -23,17 +23,26 @@ Practice about Conding_Test
     - heapq: 최소힙, 최대힙, 다익스트라 (시간복잡도: O(logN))
 - **List Indexing의 Time Complexity: O(n)**
 - **Combination의 Time COmplexity: n개 중 2개 -> O(2^n) / n개 중 3개 -> O(3^n) ...**
-- `while q` vs `while len(q)`
+~~- `while q` vs `while len(q)`
     - 결론부터 말하자면, **`while len(q)`를 활용했을 경우 속도가 조금 더 빠르다.**
     - `while q`의 경우, 시간이 q만큼 소모. 즉, 시간복잡도 O(q)
     - `while len(q)`의 경우, 시간은 상수의 시간복잡도를 가진다. 즉, 시간복잡도 O(1)
+- `while q` vs `while len(q)` (참고, 확실하진 않다.)
+    - `while q`를 활용하는 것이 시간적으로 더욱 효율적이다.
+    - `while len(q)`는 list 참조변수가 가리키는 주소로 접근해서 list 객체 안에 있는 len 변수까지 접근하기 때문에 총 2번의 연산을 하는 반면, `while q`는 list 참조변수가 가리키는 주소로 가서 한 번의 연산만 하면 종료된다.
 - "다익스트라 + 왕복 경로"를 해결할 때, 결로를 뒤집어주는 방식을 활용하는 것도 좋은 방법이 될 수 있다.
 - **`if something in [1,2,...]` 과 같은 조건문을 활용할 경우, Time Complexity는 O(N)이므로, 이를 상수 시간복잡도로 만들어주기 위하여 visited와 같은 정보를 미리 저장해놓고 사용하도록 한다.**
 - `if something in set([1,2,...])`과 같은 조건문을 사용하게 되면, Time Complexity는 O(1)이 된다.
 - `global` 변수의 경우 참조 시간이 더 오래 걸린다.
 - Python의 경우, 전역 변수에 접근하는 것은 시간이 오래걸리기 떄문에 **지역 변수로 선언하여 사용하는 것이 더 효율적**이다.
 - 원형으로 생긴 문제를 해결할 경우, 직선 구간을 *2를 해주게되면, 원형을 선형문제로 해결할 수 있다.
-
+- `defaultdict`를 사용할 경우, `dict`에 빈 리스트 혹은 int, str 등등의 값을 사전에 정의하지 않아도 append 혹은 추가에 대한 실행을 할 수 있다.
+- `Counter`는 집합 연산을 지원한다.
+    - 반면, `dictionary`는 집합 연산을 지원하지 않는다.
+    - 즉, Counter는 intersection(&), union(|)을 사용할 수 있다.
+    - 이 때, intersection의 경우 key 기준 교집합 연산을 수행하며, value의 경우 더 작은 값을 택한다.
+    - union의 경우 key 기준 합집합 연산을 수행하며, value의 경우 더 큰 값을 택한다. 
+    
 ## BackTracking
 
 <details>
