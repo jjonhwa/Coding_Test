@@ -129,7 +129,8 @@ print(ans)
     - 주의해야할 점은 정렬이 될 경우, 최소값을 보장해주지만 오름차순 혹은 내림차순의 정렬을 보장해주지는 않는다.
 - `heappush()`, `heappop()`는 O(logN)의 시간복잡도를 가진다.
 - `heapify()`는 O(N)의 시간복잡도를 가진다.
-
+- `heapq`는 tuple 형태로 값을 넣어줄 때, 0번째 index를 기준으로 정렬되며, 0번째 index가 같을 경우에는 1번째 index 순서대로 정렬된다.
+    
 #### 원소 추가 (heappush)
 ```python
 heap = []
