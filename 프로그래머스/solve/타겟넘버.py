@@ -29,3 +29,6 @@ def solution(numbers, target):
     dfs(num_list, 0)  
         
     return answer
+
+# bfs 풀이 
+https://programmers.co.kr/questions/16222
