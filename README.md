@@ -634,4 +634,63 @@ for i in range(1, n+1):
 
 </details>
 
+## 최장 증가 부분 수열(LIS) 알고리즘
+
+<details>
+    <summary><b>설명</b></summary>
+
+### LIS란?
+- 가장 긴 증가하는 부분 수열을 의미한다.
+- 예를 들어, `[6, 2, 5, 1, 7, 4, 8, 3]`가 있을 경우, LIS는 `[2, 5, 7, 8]`이 된다.
+
+### 작동 원리
+- LIS를 풀기 위한 가장 일반적인 방법은 DP를 이용하는 것이다.
+
+```python
+dp = [1] * n
+for i in range(n):
+    # 첫번째 요소부터 i번째 요소까지 비교
+    for j in range(i):
+        if arr[i] > arr[j]:
+            # 값의 크기에 따른 index를 가지게 된다.
+            dp[i] = max(dp[i], dp[j]+1)
+```
+
+- 하지만, DP로 접근하는 것은 `O(n^2)`을 갖게 된다.
+- 시간복잡도를 개선하기 위해 `이분탐색`을 활용한다.
+- 다음의 방법을 활용하여 시간복잡도 `O(N logN)`으로 개선시킬 수 있다.
+
+```python
+memoization = [0]
+arr = [0] + original_array
+
+for case in cases:
+    if memoization[-1] < case:
+        memoization.append(case)
+    else:
+        left = 0
+        right = len(memoization)
+        
+        while left < right:
+            mid = (left + right) // 2
+
+            if memoization[mid] < case:
+                left = mid + 1
+            else:
+                right = mid
+        memoization[right] = case
+```
+
+- `[6, 2, 5, 1, 7, 4, 8, 3]`가 있을 경우
+    - `[6]`
+    - `[2]`
+    - `[2, 5]`
+    - `[1, 5]`
+    - `[1,5,7]`
+    - `[1,4,7]`
+    - `[1,4,7,8]`
+    - `[1,3,7,8]`
+- 즉, 이분탐색을 이용하여 LIS를 구하게 되면, **가장 긴 증가하는 수열을 만드는 것은 아니다.** 단지, 가장 긴 증가하는 수열의 길이만을 올바르게 출력한다는 것을 알 수 있다.
+
+</details>
 
