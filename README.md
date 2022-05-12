@@ -7,6 +7,8 @@ Practice about Conding_Test
 - [분리집합](#분리집합)
 - [위상정렬](#위상정렬)
 - [플로이드 워셜](#플로이드-워셜)
+- [최장 증가 부분 수열(LIS) 알고리즘](#최장-증가-부분-수열(LIS)-알고리즘)
+- [크루스칼 알고리즘](#크루스칼-알고리즘)
 ## Module 사용법
 - [heapq](#heapq)
 - [Counter](#Counter)
@@ -694,3 +696,78 @@ for case in cases:
 
 </details>
 
+## 크루스칼 알고리즘
+
+<details>
+    <summary><b>설명</b></summary>
+
+### 크루스칼 알고리즘이란?
+- 최소신장트리을 찾는 알고리즘
+- 최소신장트리: 무방향 가중치 그래프에서 간선의 가중치 합이 최소인 것
+- 항상 욕심내서 최솟값을 선택하여 가중치의 합이 최소인 것을 찾기 때문에 그리디 알고리즘으로 볼 수 있다.
+
+
+### 작동 원리
+- 간선이 사이클을 만드는지 확인: Union-Find 알고리즘 활용
+- 그래프의 가중치를 기준으로 오름차순 정렬
+- 가중치가 낮은 간선부터 선택하면서, 사이클을 만들면 제외
+
+### 과정
+- 그래프의 가중치를 기준으로 오름차순 정렬 `(node, node, weight)
+- 정렬된 순서대로 간선을 선택한다.
+- 이 때, 사이클을 형성할 경우(Union-Find), 선택하지 않는다. (이미 낮은 간선이 먼저 선택되었으므로, 사이클을 형성하는 높은 간선은 선택하지 않는다.)
+
+
+</details>
+
+
+<details>
+    <summary><b>코드</b></summary>
+
+```python
+n = 6
+graph = [(1,2,13), (1,3,5), (2,4,9), (3,4,15), (3,5,3),
+         (4,5,1), (4,6,7), (5,6,2)]
+graph.sort(key = lambda x: x[2]) # 가중치 기준으로 정렬
+
+# parent node를 담는 list 생성 => 노드가 1번부터 시작하므로, 0을 채워준 채로 시작
+parent = [0]
+for i in range(1, n+1):
+    parent.append(i)
+
+# find 함수
+def find(x):
+    if parent[x] == x:
+        return x
+    
+    # 타고 들어가면서 부모가 자기 자신일 때 까지 반복
+    parent[x] = find(parent[x])
+    return parent[x]
+
+def union(a, b):
+    parent_a = find(a)
+    parent_b = find(b)
+
+    if parent_a < parent_b:
+        parent[parent_b] = parent_a
+    else:
+        parent[parent_a] = parent_b
+
+minimum_tree = [] # 최소신장트리
+tree_edges = 0 # 간선의 개수
+weight_sum = 0 # 가중치 합
+while True:
+    # 모든 그래프를 순회하였을 경우 break
+    if tree_edges == n-1:
+        break
+    
+    a, b, weight = graph.pop(0)
+    # 서로 다른 집합이라면 추가 (즉, 사이클이 생성되지 않는다면)
+    if find(a) != find(b):
+        union(a, b)
+        minimum_tree.append((a, b))
+        tree_edges += 1
+        weight_sum += weight
+```
+
+</details>
