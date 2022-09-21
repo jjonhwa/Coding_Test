@@ -669,8 +669,12 @@ memoization = [0]
 arr = [0] + original_array
 
 for case in cases:
+    
+    # 기존 최댓값보다 큰 값이 들어올 경우, 조건 없이 삽입 
     if memoization[-1] < case:
         memoization.append(case)
+    
+    # 최댓값보다 작은 값일 경우, 이분탐색으로 삽입될 위치를 탐색 후 변경하여 삽입
     else:
         left = 0
         right = len(memoization)
