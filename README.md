@@ -797,7 +797,9 @@ while True:
 - `cache hit`: cache에 이미 있는 값이 새로 들어올 경우, 기존의 값을 삭제하고 맨 뒤에 추가
 - `cache miss`: cache에 존재하지 않을 경우, 맨 처음 들어온 값이 삭제되고 맨 뒤에 추가
 
-## 다익스트라
+</details>
+
+    ## 다익스트라
 
 <details>
     <summary><b>설명</b></summary>
