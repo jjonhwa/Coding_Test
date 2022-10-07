@@ -799,7 +799,7 @@ while True:
 
 </details>
 
-    ## 다익스트라
+## 다익스트라
 
 <details>
     <summary><b>설명</b></summary>
