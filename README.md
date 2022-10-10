@@ -1021,12 +1021,6 @@ if negative_cycle:
     print("YES")
 else:
     print("NO")
-
-"""
-    밸만포드 알고리즘에 대하여 공부할 수 있었습니다!
-
-    시작지점이 없다는 포인트 때문에 상당히 해맸었는데, 
-"""
 ```
 
 </details>
