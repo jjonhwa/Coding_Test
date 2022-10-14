@@ -12,6 +12,7 @@ Practice about Conding_Test
 - [LRU 알고리즘](#LRU-알고리즘)
 - [다익스트라](#다익스트라)
 - [밸만포드](#밸만포드)
+- [최소 스패닝 트리](#최소-스패닝-트리)
 ## Module 사용법
 - [heapq](#heapq)
 - [Counter](#Counter)
@@ -1021,6 +1022,142 @@ if negative_cycle:
     print("YES")
 else:
     print("NO")
+```
+
+</details>
+
+## 최소 스패닝 트리
+
+<details>
+    <summary><b>설명</b></summary>
+
+### 스패닝 트리란?
+- 그래프 내의 모든 정점을 포함하는 트리
+- **최소 연결 부분 그래프** => 즉, 간선의 수가 가장 적은 그래프
+- **최소 간선**을 가지는 그래프는 필연적으로 트리 형태가 되고, 이를 **스패닝 트리**라고 한다.
+
+### 스패닝 트리의 특징
+- **DFS**, **BFS**를 이용하여 그래프에서 스패닝 트리를 찾을 수 있다.
+- 하나의 그래프에는 여러개의 스패닝 트리가 존재할 수 있다.
+- 스패닝 트리는 트리의 특수한 형태로서, **모든 정점들이 연결**되어 있고, **사이클을 포함하지 않는다.**
+
+### 최소 스패닝 트리
+- 최소 스패닝 트리란, 간선의 가중치가 존재할 때, 가중치를 고려하여 최소 비용을 가지는 스패닝 트리를 의미한다.
+- 즉, 스패닝 트리 중, 가중치가 가장 작은 스패닝 트리를 최소 스패닝 트리라고 한다.
+
+### 최소 스패닝 트리의 특징
+- N개의 Node가 있을 때, N-1개의 간선만을 사용해야 한다.
+- 사이클이 포함되어서는 안된다.
+- 간선의 가중치 합이 최소여야 한다.
+
+### 구현 방법
+
+#### Kruskal MST 알고리즘
+- 1. 그래프의 간선들을 가중치의 오름차순 정렬
+- 2. 간선을 순차적으로 확인하면서, 사이클을 형성하지 않는 간선을 선택한다.
+    - 2-1. 사이클 형성 확인 - 분리집합 활용
+- 3. 해당 간선을 MST 집합에 추가한다.
+
+#### Prim MST 알고리즘
+- 1. 시작 정점만을 MST 집합에 추가
+- 2. 현재 선택된 정점들에서 연결된 최소 간선을 선택 (이 때, 상대 노드는 선택되지 않은 노드)
+- 3. n-1개의 edge를 가질 때 까지 반복
+
+</details>
+
+
+<details>
+    <summary><b>Kruskal MST 알고리즘 구현 과정</b></summary>
+
+### 크루스칼 MST 알고리즘
+
+```python
+n = 6
+edges = [(1,2,13), (1,3,5), (2,4,9), (3,4,15), (3,5,3),
+         (4,5,1), (4,6,7), (5,6,2)]
+edges.sort(key = lambda x: x[2]) # 간선 가중치의 오름차순으로 정렬
+edges = deque(edges)
+
+parent = [i for i in range(n+1)] # 0부터 시작 혹은 1부터 시작에 따라서 유동적으로 변경
+
+def find(x):
+    if parent[x] == x:
+        return x
+
+    parent[x] = find(parent[x])
+    return parent[x]
+
+def union(a, b):
+    parent_a = find(a)
+    parent_b = find(b)
+
+    if parent_a < parent_b:
+        parent[parent_b] = parent_a
+    else:
+        parent[parent_a] = parent_b
+    
+mst = []
+edge_count = 0
+weight_sum = 0
+while True:
+    if edge_count == n-1: # 최소 스패닝 트리의 최소 edge의 개수는 n-1개
+        break
+
+    a, b, weight = edges.popleft()
+    if find(a) != find(b):
+        union(a, b)
+        mst.append((a, b))
+        weight_sum += weight
+        edge_count += 1
+```
+
+</details>
+
+<details>
+    <summary><b>Prim MST 알고리즘 구현 과정</b></summary>
+
+### Prim MST 알고리즘
+
+```python
+import heapq
+
+n = 6
+edges = [(1,2,13), (1,3,5), (2,4,9), (3,4,15), (3,5,3),
+         (4,5,1), (4,6,7), (5,6,2)]
+graph = [[] for _ in range(n+1)]
+
+# 내 좌표도 함께 넣어주도록 한다.
+for edge in edges:
+    a, b, weight = edge
+    graph[a].append((weight, b, a))
+    graph[b].append((weight, a, b))
+
+# 선택된 노드를 확인하기 위해 방문 체크
+visited = [False for _ in range(n+1)]
+
+# 시작 노드부터 출발
+start_node = 1
+candidate = graph[start_node]
+heapq.heapify(candidate)
+visited[start_node] = True
+
+mst = []
+total_weight = 0
+while candidate:
+    # 가장 가중치가 낮은 간선부터 추출
+    weight, you, me = heapq.heappop(candidate)
+
+    if not visited[you]:
+        visited[you] = True
+        mst.append((me, you))
+        total_weight += weight
+
+        # 다음 인접 간선 탐색
+        for _next in graph[you]:
+
+            # you에 연결된 노드 중에서 방문하지 않았을 경우에만 candidate에 추가
+            if not visited[_next[1]]:
+                heapq.heappush(candidate, _next)
 ```
 
 </details>
