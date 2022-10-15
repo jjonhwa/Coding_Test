@@ -1161,3 +1161,79 @@ while candidate:
 ```
 
 </details>
+
+## 순열과 조합 구현
+
+<details>
+    <summary><b>설명</b></summary>
+
+- 순열과 조합을 활용하면서, 이 함수를 활용하는 도중에 백트래킹이 필요할 때, 직접 구현할 필요성이 있다.
+- 모든 순열과, 조합이 필요하다면 `itertools`에서 활용하는 것이 단연 더 좋다.
+- 다만, 백트래킹이 필요할 때, 직접 구현해야 하므로 알아두도록 하자.
+
+### 순열
+1. 배열과 길이를 입력받는다.
+2. 정렬의 경우, 큰 의미는 없지만 출력할 때 정렬된 채로 출력하기 위하여 사용한다.
+3. 현재 값이 `chosen`안에 들어있는 지를, `visited`로 확인한다.
+4. 배열이 원하는 길이만큼 생성되었다면 종료
+5. `visited`, `generate`, `unvisited` 순으로 들어가면서, 배열을 생성한다.
+
+### 조합
+1. 배열과 길이를 입력받는다.
+2. 정렬의 경우, 큰 의미는 없지만 출력할 때 정렬된 채로 출력하기 위하여 사용한다.
+3. `방문 체크를 하지 않고`, `현재 index의 다음 index부터 반복`을 해준다.
+
+
+</details>
+
+
+<details>
+    <summary><b>순열과 조합</b></summary>
+
+### 순열
+
+```python
+
+def permutation(arr: list, r: int):
+    arr = sorted(arr)
+    visited = [False for _ in range(len(arr))]
+
+    def generate(chosen, visited):
+        if len(chosen) == r:
+            print(chosen)
+            return
+
+        for i in range(len(arr)):
+            if not visited[i]:
+                chosen.append(arr[i])
+                visited[i] = True
+                generate(chosen, visited)
+                visited[i] = False
+                chosen.pop()
+    
+    generate([], used)
+
+```
+
+### 조합
+
+```python
+
+def combination(arr:list, r: int):
+    arr = sorted(arr)
+
+    def generate(chosen, num):
+        if len(chosen) == r:
+            print(chosen)
+            return
+        
+        for i in range(num, len(arr)):
+            chosen.append(arr[i])
+            generate(chosen, i+1)
+            chosen.pop()
+    
+    generate([], 0)
+
+```
+
+</details>
