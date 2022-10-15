@@ -13,6 +13,8 @@ Practice about Conding_Test
 - [다익스트라](#다익스트라)
 - [밸만포드](#밸만포드)
 - [최소 스패닝 트리](#최소-스패닝-트리)
+- [순열과 조합](#순열과-조합)
+
 ## Module 사용법
 - [heapq](#heapq)
 - [Counter](#Counter)
