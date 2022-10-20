@@ -1257,11 +1257,11 @@ def combination(arr:list, r: int):
 4. 2-3을 반복.
 5. 약수의 성질에 의하여, 반복은 n의 sqrt만큼까지만 수행한다.
 - (증명)
-    - n = a x b. where a, b는 자연수
-    - n = m x m. where m = sqrt(n)
-    - ab = m^2
-    - 이 때, a, b가 자연수가 되기 위해서는 1) a=m 이고 b=m, 2) a<m 이고 b>m, 3) a>m 이고 b<m.
-    - 즉, min(a, b) <= m이므로, 둘 중 하나는 무조건 sqrt(n)보다 작기 때문에 sqrt(n)까지만 반복하면 n이 소수인지 아닌지 판단할 수 있다.
+    - `n = a x b`. where a, b는 자연수
+    - `n = m x m`. where m = sqrt(n)
+    - `ab = m^2`
+    - 이 때, a, b가 자연수가 되기 위해서는 1) `a=m 이고 b=m`, 2) `a<m 이고 b>m`, 3) `a>m 이고 b<m`.
+    - 즉, `min(a, b) <= m`이므로, `둘 중 하나는 무조건 sqrt(n)보다 작기 때문`에 sqrt(n)까지만 반복하면 n이 소수인지 아닌지 판단할 수 있다.
 
 </details>
 
