@@ -1239,3 +1239,123 @@ def combination(arr:list, r: int):
 ```
 
 </details>
+
+## 에라토스테네스의 체
+
+<details>
+    <summary><b>설명</b></summary>
+
+### 에라토스테네스의 체란?
+- 소수 판별 알고리즘
+
+### 구현 순서
+1. 모든 자연수를 나열한다.
+2. 처리하지 않은 수는 소수 판정.
+3. 처리하지 않은 수의 배수는 모두 소수가 아니라고 판정.
+4. 2-3을 반복.
+5. 약수의 성질에 의하여, 반복은 n의 sqrt만큼까지만 수행한다.
+- (증명)
+    - n = a x b. where a, b는 자연수
+    - n = m x m. where m = sqrt(n)
+    - ab = m^2
+    - 이 때, a, b가 자연수가 되기 위해서는 1) a=m 이고 b=m, 2) a<m 이고 b>m, 3) a>m 이고 b<m.
+    - 즉, min(a, b) <= m이므로, 둘 중 하나는 무조건 sqrt(n)보다 작기 때문에 sqrt(n)까지만 반복하면 n이 소수인지 아닌지 판단할 수 있다.
+
+</details>
+
+
+<details>
+    <summary><b>코드</b></summary>
+
+```python
+
+def is_prime_num(n):
+
+    # 1. 배열 생성
+    arr = [True] * (n+1)
+    arr[0] = False
+    arr[1] = False
+    
+    # 모든 수들을 돌면서 소수 판정 수행
+    check_n = int(math.sqrt(n)) + 1
+    for i in range(2, check_n):
+        if arr[i] == True: # 처리하지 않았다면 소수 판정
+            j = 2
+
+            while (i*j) <= n: # 배수는 모두 소수가 아니라고 판정
+                arr[i*j] = False
+                j += 1
+    
+    return arr
+
+n = 100
+prime = is_prime_num(n)
+
+# n이하의 소수들을 원소로 하는 list 출력
+print(prime)
+```
+
+</details>
+
+## 수열의 연속된 값의 합 구현
+
+<details>
+    <summary><b>설명</b></summary>
+
+- 수열이 있다고 할 때, `연속되는 값의 구간합`이 n이 되는 경우의 수를 구하여라.
+- `[2, 3, 5, 7, 11, 13]`이 있을 때, 연속되는 값의 구간합이 5인 경우는 `[2,3]`, `[5]`이다. 
+- 투포인터를 활용하여 구현할 수 있다.
+
+</details>
+
+
+<details>
+    <summary><b>코드 구현</b></summary>
+
+본 코드는 소수일 경우에 대하여 수행한 코드이다.
+
+```python
+prime = [2, 3, 5, 7, 11, 13]
+n = 5
+
+left_pointer, right_pointer = 0, 0
+
+if n == 1:
+    answer = 0
+elif n == 2:
+    answer = 1
+else:
+    answer = 0
+    check_answer = prime[answer]
+
+while True:
+
+    # n=1, n=2일 경우, 루프를 돌 필요가 없으므로 종료
+    if n == 1 or n == 2:
+        break
+    
+    # 1. 연속합의 값이 목표값보다 작을 경우 right up, 크거나 같을 경우 left up
+    if check_answer < n:
+        right_pointer += 1
+        
+        # right index가 구간을 넘어갈 경우 종료
+        if right_pointer >= len(prime):
+            break
+
+        check_answer += prime[right_pointer]
+    else:
+        check_answer -= prime[left_pointer]
+        left_pointer += 1
+
+        # left index가 right index보다 클 경우 종료
+        if left_pointer > right_pointer:
+            break
+
+    # 2. 합이 n과 같을 경우 count
+    if check_answer == n:
+        answer += 1
+
+print(answer)
+```
+
+</details>
