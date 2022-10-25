@@ -3,7 +3,7 @@ input = sys.stdin.readline
 
 c = int(input())
 
-def back_permutation(chosen, visit, num):
+def back_permutation(chosen, num):
     global max_value
 
     if len(chosen) == len(arr):
@@ -15,7 +15,7 @@ def back_permutation(chosen, visit, num):
         if not visit[i] and graph[num][i] != 0:
             chosen.append(arr[i])
             visit[i] = 1
-            back_permutation(chosen, visit, num+1)
+            back_permutation(chosen, num+1)
             visit[i] = 0
             chosen.pop()
 
@@ -29,6 +29,6 @@ for _ in range(c):
     visit = [0] * len(arr)
     max_value = float("-inf")
 
-    back_permutation([], visit, 0)
+    back_permutation([], 0)
 
     print(max_value)
