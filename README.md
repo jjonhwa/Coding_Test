@@ -17,10 +17,12 @@ Practice about Conding_Test
 - [에라토스테네스의 체](#에라토스테네스의-체)
 - [수열의 연속된 값의 합 구현](#수열의-연속된-값의-합-구현)
 - [3차원_BFS](#3차원-bfs)
+- [Manacher 알고리즘 (팰린드롬)](#manacher-알고리즘-팰린드롬)
 
 ## Module 사용법
 - [heapq](#heapq)
 - [Counter](#Counter)
+- [List 전치](#list-전치)
 
 ## Study
 
@@ -299,6 +301,53 @@ common = Counter("hello world").most_common()
 # [('l', 3), ('o', 2), ('h', 1), ('e', 1), (' ', 1), ('w', 1), ('r', 1), ('d', 1)]
 
 print(common[0])
+```
+
+</details>
+
+## List 전치
+
+<details>
+    <summary><b>설명</b></summary>
+
+- 파이썬의 기본 문법을 사용하여 2중 리스트를 전치하는 방법
+
+### Description
+
+```python
+
+A = [[1,2,3], [4,5,6]]
+B = [list(x) for x in zip(*A)]    # without map
+C = list(map(list, zip(*A)))      # with map
+
+```
+
+### * 연산자
+- List 혹은 Tuple에 있는 elements를 순서대로 꺼내어 함수의 인자에 대응한다.
+
+```python
+
+# 함수에서 받는 인자의 개수와 list의 길이가 같아야지만 사용가능
+def add(x, y):
+    return x+y
+
+a = [1, 2]
+add(*a)
+
+```
+
+### *연산자 + zip함수
+- 만약 이중리스트에 *를 사용할 경우, List가 반환된다.
+- 이 때, List가 통째로 반환되는 것이 아니라, 각 리스트의 원소들을 차례로 반환한다.
+
+```python
+C = [[1,2,3], [4,5,6]]
+for x in zip(*C):
+    print(x)
+
+(1,4)
+(2,5)
+(3,6)
 ```
 
 </details>
@@ -1456,3 +1505,105 @@ else:
 ```
 
 </details>
+
+## Manacher 알고리즘 (팰린드롬)
+
+<details>
+    <summary><b>설명</b></summary>
+
+### Manacher 알고리즘이란?
+- 팰린드롬을 구하는 문제에서 모든 위치에서의 팰린드롬의 길이를 구하는 알고리즘
+- `O(n)`의 시간복잡도로 구현 가능
+
+### 구현 방법
+- [참고 링크](#https://ialy1595.github.io/post/manacher/)
+- [참고 코드](#https://github.com/HeoSeokYong/AlgorithmStudy/blob/main/Dynamic_Programming/palindrome.py)
+
+- Notation
+    - i: 현재 지점
+    - j: P를 기준으로 i에 대칭인 지점
+    - P: 가장 긴 팰린드롬을 보유한 중심 지점
+    - R: 가장 긴 팰린드롬에서의 우측 지점
+    - L: 가장 긴 팰린드롬에서의 좌측 지점
+    - r-i: 팰린드롬의 길이 (두 배로 늘려줬기 때문에)
+
+- 1. Seperate => 각 문자열 사이에 hash를 삽입한다. (홀, 짝을 모두 해결하기 위해)
+- 2. 팰린드롬 길이를 각 문자에 대하여 모두 0으로 삽입
+- 3. 처음 시작 or 현재 위치가 R 보다 클 경우 => 가장 긴 팰린드롬을 탐색
+    - 3-1. 현재 위치 갱신 => 현재위치 = 가장 긴 우측지점
+    - 3-2. while문 => 팰린드롬인가? => r을 1씩 증가
+- 4. 현재 위치가 R보다 작을 경우 => 이전에 활용한 정보를 재활용 가능
+    - 4-1. 현재지점은 반드시 P보다는 크다.
+    - 4-2. "j의 팰린드롬 길이로 부터 좌측 지점이 L보다 크다면" => i의 팰린드롬 길이 = j의 팰린드롬 길이
+    - 4-3. "j의 팰린드롬 길이로 부터 좌측 지점이 L보다 작다면" => i의 팰린드롬 길이 = "반드시 i부터 R까지의 길이" => L-1 지점의 값과 R+1 지점의 값이 같다면 P를 기준으로 가장 긴 팰린드롬은 [L-1, R+1]이어야 하는데, 실제로 [L, R]이기 떄문에.
+    - 4-4. "j의 팰린드롬 길이로 부터 좌측 지점이 정확히 L이라면" => i의 팰린드롬 길이 = "R까지는 팰린드롬이지만, 더 길어질지는 알 수 없다" => R이후로 비교 => 더 길다면 P와 R 갱신
+
+</details>
+
+
+<details>
+    <summary><b>Manacher 알고리즘 구현 과정</b></summary>
+
+```python
+
+def solution(N):
+
+    # 1. Seperate => 각 문자열 사이에 hash를 삽입한다. (홀, 짝을 모두 해결하기 위해)
+    nums = []
+    for x in map(int, input().split()):
+        nums.extend([0, x])
+    nums.append(0)
+
+    M = int(input())
+    questions = [tuple(map(int, input().split())) for _ in range(M)]
+
+    # 2. 팰린드롬 길이를 각 문자에 대하여 모두 0으로 삽입
+    dp = [0] * len(nums)
+    p = r = 0
+
+    for i in range(len(nums)):
+        
+        # 3. 처음 시작 or 현재 위치가 R 보다 클 경우 => 가장 긴 팰린드롬을 탐색
+        if r < i:
+
+            # 3-1. 현재 위치 갱신 => 현재위치 = 가장 긴 우측지점
+            p = r = i
+
+            # 3-2. while문 => 팰린드롬인가? => r을 1씩 증가
+            while r < len(nums) and r <= 2*p and nums[r] == nums[2*p - r]:
+                r += 1
+            r -= 1
+            dp[i] = r - p
+
+        # 4. 현재 위치가 R보다 작을 경우 => 이전에 활용한 정보를 재활용 가능
+        else:
+            j = 2*p - i
+
+            # 4-2. "j의 팰린드롬 길이로 부터 좌측 지점이 L보다 크다면" => i의 팰린드롬 길이 = j의 팰린드롬 길이
+            if dp[j] < r - i:
+                dp[i] = dp[j]
+            
+            # 4-3. "j의 팰린드롬 길이로 부터 좌측 지점이 L보다 작다면" => i의 팰린드롬 길이 = "반드시 i부터 R까지의 길이" => L-1 지점의 값과 R+1 지점의 값이 같다면 P를 기준으로 가장 긴 팰린드롬은 [L-1, R+1]이어야 하는데, 실제로 [L, R]이기 떄문에.
+            elif dp[j] > r - i:
+                dp[i] = r - i
+            
+            # 4-4. "j의 팰린드롬 길이로 부터 좌측 지점이 정확히 L이라면" => i의 팰린드롬 길이 = "R까지는 팰린드롬이지만, 더 길어질지는 알 수 없다" => R이후로 비교 => 더 길다면 P와 R 갱신
+            else: # dp[j] == r - i
+                p = i
+                while r < len(nums) and r <= 2*p and nums[r] == nums[2*p - r]:
+                    r += 1
+                r -= 1
+                dp[i] = r - p
+
+    for s, e in questions:
+        ns, ne = 2*s-1, 2*e-1
+        if dp[(ns+ne) // 2] >= e - s + 1:
+            print(1)
+        else:
+            print(0)
+
+
+```
+
+</details>
+
