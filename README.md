@@ -1516,8 +1516,8 @@ else:
 - `O(n)`의 시간복잡도로 구현 가능
 
 ### 구현 방법
-- [참고 링크](#https://ialy1595.github.io/post/manacher/)
-- [참고 코드](#https://github.com/HeoSeokYong/AlgorithmStudy/blob/main/Dynamic_Programming/palindrome.py)
+- [참고 링크](https://ialy1595.github.io/post/manacher/)
+- [참고 코드](https://github.com/HeoSeokYong/AlgorithmStudy/blob/main/Dynamic_Programming/palindrome.py)
 
 - Notation
     - i: 현재 지점
